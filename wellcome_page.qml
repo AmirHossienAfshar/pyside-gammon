@@ -15,6 +15,7 @@ ApplicationWindow {
 
     User_registration_class {
         id: pyside_backend
+        // properities: pyside_selected_user, pyside_active_users_list, pyside_username
     }
 
     ColumnLayout {
@@ -28,6 +29,7 @@ ApplicationWindow {
             Layout.preferredHeight: parent.height * 0.33
             color: "#cb6666"
             Text {
+                id: greeting
                 text: "wellcome!"
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignHCenter
@@ -92,13 +94,14 @@ ApplicationWindow {
                         if (is_registerd === true)
                         {
                             registeration_lable.text = "registration is done!"
+                            greeting.text = "wellcom " + username_input.text + "!"
+                            register_input_rectangle.visible = false
                         }
                         else
                         {
                             registeration_lable.text = "registration faild. try again!"
                         }
                         username_input.text = "type down your name...";
-
                     }
                 }
             }
@@ -177,6 +180,18 @@ ApplicationWindow {
                                 Layout.column: 1
                                 Layout.minimumWidth: 100
                                 Layout.alignment: Qt.AlignCenter
+                                onClicked: {
+                                    if (pyside_backend.pyside_username === modelData)
+                                    {
+                                        registeration_lable.text = "can't use yourself as opponent!"
+
+                                    }
+                                    else
+                                    {
+                                        pyside_backend.pyside_selected_user = modelData
+                                        registeration_lable.text = "you choosed to play with " + modelData
+                                    }
+                                }
                             }
                         }
                     }
