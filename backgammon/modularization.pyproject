@@ -1,8 +1,0 @@
-{
-    "files": [
-        "dragModule.qml",
-        "main.py",
-        "dropModule.qml",
-        "main.qml"
-    ]
-}

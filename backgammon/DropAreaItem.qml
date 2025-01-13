@@ -22,7 +22,6 @@
 // }
 import QtQuick 2.15
 import QtQuick.Shapes 1.8
-// import "dropAnimation.js" as Animation
 
 Rectangle {
     id: triangleContainer

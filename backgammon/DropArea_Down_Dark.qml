@@ -7,6 +7,10 @@ Rectangle {
     height: 300
     color: "transparent"
 
+    property int marble_numbers: 0                  // Number of marbles
+    property var marble_list: []                    // List of marble identifiers
+    property string current_color: "None"           // Current color ("Light", "Dark", or "None")
+
     property bool marbleHovered: false  // Tracks hover state
     property string dropName: ""
     
@@ -39,19 +43,87 @@ Rectangle {
             console.log("Drag entered drop area: ", dropName)
             marbleHovered = true;
         }
-        onDropped:
-        {
+    //     onDropped:
+    //     {
+    //         console.log("///////////////////DROP/////////////////////////")
+    //         console.log("Item dropped with keys:", drag.source.Drag.keys)
+    //         console.log("Item dropped at the name:", dropName)
+    //         marbleHovered = false;
+    //     } 
+    //     onExited: {
+    //         marbleHovered = false;
+    //         console.log("Drag left drop area: ", dropName)
+    //     }
+        onDropped: {
             console.log("///////////////////DROP/////////////////////////")
-            console.log("Item dropped with keys:", drag.source.Drag.keys)
-            console.log("Item dropped at the name:", dropName)
+            let droppedKeys = drag.source.Drag.keys;
+            if (droppedKeys.length > 0) {
+                let marbleName = droppedKeys[0]; // Example: "Marble_Light_1"
+
+                // Add marble only if it's not already in the list
+                if (!marble_list.includes(marbleName)) {
+                    marble_list.push(marbleName);
+                    marble_numbers += 1;
+
+                    // Determine and update the current color
+                    if (marbleName.includes("Light")) {
+                        current_color = "Light";
+                    } else if (marbleName.includes("Dark")) {
+                        current_color = "Dark";
+                    }
+                }
+                console.log("Updated marble list:", marble_list);
+                console.log("Marble count:", marble_numbers);
+                console.log("Current color:", current_color);
+            }
             marbleHovered = false;
-        } 
-        onExited: {
-            marbleHovered = false;
-            console.log("Drag left drop area: ", dropName)
         }
 
+        onExited: {
+            console.log("Drag left drop area: ", dropName);
+            marbleHovered = false;
+
+            // Remove marble if it exits the area
+            let exitedKeys = drag.source.Drag.keys;
+            if (exitedKeys.length > 0) {
+                let marbleName = exitedKeys[0]; // Example: "Marble_Light_1"
+
+                // Remove marble from list if it exists
+                let index = marble_list.indexOf(marbleName);
+                if (index !== -1) {
+                    marble_list.splice(index, 1);
+                    marble_numbers -= 1;
+                }
+
+                // Update the current color based on the remaining marbles
+                if (marble_list.length > 0) {
+                    if (marble_list.some(m => m.includes("Light"))) {
+                        current_color = "Light";
+                    } else if (marble_list.some(m => m.includes("Dark"))) {
+                        current_color = "Dark";
+                    }
+                } else {
+                    current_color = "None"; // No marbles left
+                }
+
+                console.log("Updated marble list after exit:", marble_list);
+                console.log("Marble count after exit:", marble_numbers);
+                console.log("Current color:", current_color);
+            }
+        }
     }
+
+    // Optional debug information
+    Text {
+        id: debugText
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        text: "Marbles: " + marble_numbers// + ", List: " + marble_list + ", Color: " + current_color
+        color: "red"
+        font.pixelSize: 12
+        visible: true
+    }   
+}
 
     // Text {
     //     id: debugText
@@ -61,5 +133,5 @@ Rectangle {
     //     font.pixelSize: 20
     //     visible: marbleHovered
     // }
-}
+
 

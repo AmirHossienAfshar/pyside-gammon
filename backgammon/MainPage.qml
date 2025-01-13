@@ -29,7 +29,7 @@ Item {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        height: parent.height / 3
+        height: parent.height / 2.5
         spacing: 0 // Ensure no extra space between items
 
         DropArea_Down_Dark {
@@ -76,7 +76,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        height: parent.height / 3
+        height: parent.height / 2.5
         spacing: 0 // Ensure no extra space between items
 
 
@@ -117,7 +117,4 @@ Item {
             dropName: "12"
         }
     }
-
-
-
 }
