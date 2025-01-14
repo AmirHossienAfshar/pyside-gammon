@@ -60,10 +60,40 @@ Rectangle {
             {
                 if (current_color == "Light")
                 {
+                    console.log("current number is!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", draggableList.length)
                     if (draggableList.length == 1) {
                         if (marbleName.includes("Dark")){
                             // put the one inside the draggableList in the middle
                             // put the black one in the drop area.
+                            // "Hit" scenario: Replace Dark with Light
+                            console.log("Hit: Replacing Light with Dark marble.");
+                            let removedMarbleName = draggableList.pop(); // Remove the Dark marble's name
+                            console.log("Removed marble:", removedMarbleName);
+
+                            let oldMarble = null;
+                            for (let child of drag.source.parent.children) {
+                                if (child.Drag && child.Drag.keys.includes(removedMarbleName)) {
+                                    oldMarble = child;
+                                    break;
+                                }
+                            }
+                            // Move the old marble to the desired position (e.g., middle of the board)
+                            if (oldMarble) {
+                                main_window.moveToOpponentHitTray(oldMarble);
+                            } else {
+                                console.log("Could not find marble object for:", removedMarbleName);
+                            }
+                            draggableList.push(marbleName); // Add the Light marble
+                            current_color = "Dark"; // Update the current color
+
+                            let targetPos = triangleContainer.mapToItem(drag.source.parent, 0, 0);
+                            drag.source.x = targetPos.x + (triangleContainer.width - drag.source.width) / 2;
+                            drag.source.y = targetPos.y + triangleContainer.height - (drag.source.height);
+
+                            console.log("Current draggable list:", draggableList);
+
+
+                            return; // Prevent further execution
                         }
                         else {
                             draggableList.push(marbleName);
@@ -90,6 +120,26 @@ Rectangle {
                         if (marbleName.includes("Light")){
                             // put the one inside the draggableList in the middle
                             // put the black one in the drop area.
+                            // "Hit" scenario: Replace Dark with Light
+                            console.log("Hit: Replacing Dark with Light marble.");
+                            let removedMarbleName = draggableList.pop(); // Remove the Dark marble's name
+                            console.log("Removed marble:", removedMarbleName);
+
+                            let oldMarble = null;
+                            for (let child of drag.source.parent.children) {
+                                if (child.Drag && child.Drag.keys.includes(removedMarbleName)) {
+                                    oldMarble = child;
+                                    break;
+                                }
+                            }
+                            // Move the old marble to the desired position (e.g., middle of the board)
+                            if (oldMarble) {
+                                main_window.moveToOpponentHitTray(oldMarble);
+                            } else {
+                                console.log("Could not find marble object for:", removedMarbleName);
+                            }
+                            draggableList.push(marbleName); // Add the Light marble
+                            current_color = "Light"; // Update the current color
                         }
                         else {
                             draggableList.push(marbleName);
@@ -126,8 +176,8 @@ Rectangle {
             // Add the marble to the list
             // draggableList.push(marbleName);
             // console.log("Added draggable:", marbleName, "to drop area:", dropName);
+            console.log("this is the the dropable: ", dropName)
             console.log("Current draggable list:", draggableList);
-
 
             // Position the draggable at the top of the stack
             let marbleNumbers = draggableList.length;
@@ -141,12 +191,12 @@ Rectangle {
             marbleHovered = false;
 
             // Allow only the top marble to be moved
-            if (marbleName !== draggableList[draggableList.length - 1]) {
-                console.log("Only the top draggable can be moved!");
-                drag.source.x = drag.source.previousX;
-                drag.source.y = drag.source.previousY;
-                return;
-            }
+            // if (marbleName !== draggableList[draggableList.length - 1]) {
+            //     console.log("Only the top draggable can be moved!");
+            //     drag.source.x = drag.source.previousX;
+            //     drag.source.y = drag.source.previousY;
+            //     return;
+            // }
 
             // Remove the marble from the list
             let index = draggableList.indexOf(marbleName);
@@ -162,27 +212,5 @@ Rectangle {
             console.log("Current color:", current_color);
         }
     }
-
-
-    // DropArea {
-        // anchors.fill: parent
-    //     onEntered:
-    //     {
-    //         console.log("Drag entered drop area: ", dropName)
-    //         marbleHovered = true;
-    //     }
-    //     onDropped:
-    //     {
-    //         console.log("///////////////////DROP/////////////////////////")
-    //         console.log("Item dropped with keys:", drag.source.Drag.keys)
-    //         console.log("Item dropped at the name:", dropName)
-    //         marbleHovered = false;
-    //     } 
-    //     onExited: {
-    //         marbleHovered = false;
-    //         console.log("Drag left drop area: ", dropName)
-    //     }
-    // }
-
 }
 
