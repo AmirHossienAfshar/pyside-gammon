@@ -1,7 +1,5 @@
 import QtQuick 2.15
 
-
-
 Rectangle {
     id: rightDropArea
     // Layout.fillHeight: true

@@ -24,38 +24,6 @@ ApplicationWindow {
             anchors.margins: 10 // Add margins to create spacing around inner content
             spacing: 50 // Increased spacing between the elements
 
-            // Left Drop Area (Rectangle)
-            // Rectangle {
-            //     id: leftDropArea
-            //     Layout.fillHeight: true
-            //     width: 50 // Fixed width for the left drop area
-            //     color: "#8B4513" // Dark brown color for the left drop area
-            //     // border.color: "black"
-            //     border.width: 2
-            //     // Add properties for future drag/drop functionality
-
-            //     property bool marbleHovered: false  // Tracks hover state
-            //     property string dropName: "left"
-
-            //     DropArea {
-            //         anchors.fill: parent
-            //         onEntered: {
-            //             console.log("Drag entered left drop area")
-            //             leftDropArea.marbleHovered = true;
-            //         }
-            //         onExited: {
-            //             leftDropArea.marbleHovered = false;
-            //             console.log("Drag left left drop area")
-            //         }
-            //         onDropped: {
-            //             console.log("Item dropped in left drop area with keys:", drag.source.Drag.keys)
-            //             console.log("Drop area name:", leftDropArea.dropName)
-            //             leftDropArea.marbleHovered = false;
-            //         }
-            //     }
-
-            //     border.color: marbleHovered ? "gold" : "black" // Change border color on hover
-            // }
             Side_Tray {
                 id: leftBearOff
                 dropName: "left BearOff"
@@ -133,6 +101,8 @@ ApplicationWindow {
             }
         }
     }
+
+    
     Draggable_Marble_Light {
         x: 100
         y: 100

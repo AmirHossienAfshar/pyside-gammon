@@ -18,6 +18,16 @@ Rectangle {
     Drag.hotSpot.y: height / 2
     Drag.keys: [dragKeys]
 
+    property real previousX: x
+    property real previousY: y
+
+    Behavior on x {
+        NumberAnimation { duration: 300; easing.type: Easing.InOutQuad }
+    }
+    Behavior on y {
+        NumberAnimation { duration: 300; easing.type: Easing.InOutQuad }
+    }
+
     MouseArea {
         cursorShape: Qt.PointingHandCursor
         hoverEnabled: true
@@ -29,6 +39,11 @@ Rectangle {
                 console.log("Releasing drag; calling Drag.drop()");
                 parent.Drag.drop();
             }
+        }
+        onPressed: {
+            // Store the current position before dragging
+            creamMarble.previousX = creamMarble.x;
+            creamMarble.previousY = creamMarble.y;
         }
 
         // Main Circle with Gradient

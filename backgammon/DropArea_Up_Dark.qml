@@ -9,6 +9,10 @@ Rectangle {
 
     property bool marbleHovered: false  // Tracks hover state
     property string dropName: ""
+
+    property int marble_numbers: 0                  // Number of marbles
+    property var draggableList: []                    // List of marble identifiers
+    property string current_color: "None" 
     
     Shape {
         id: triangle
@@ -34,32 +38,151 @@ Rectangle {
 
     DropArea {
         anchors.fill: parent
-        onEntered:
-        {
-            console.log("Drag entered drop area: ", dropName)
+        onEntered: {
             marbleHovered = true;
+            console.log("Drag entered drop area: ", dropName);
         }
-        onDropped:
-        {
-            console.log("///////////////////DROP/////////////////////////")
-            console.log("Item dropped with keys:", drag.source.Drag.keys)
-            console.log("Item dropped at the name:", dropName)
+        onDropped: {
+            console.log("///////////////////DROP/////////////////////////");
+            let droppedKeys = drag.source.Drag.keys;
+            let marbleName = droppedKeys[0]; // Example: "Marble_Light_1"
             marbleHovered = false;
-        } 
-        onExited: {
-            marbleHovered = false;
-            console.log("Drag left drop area: ", dropName)
-        }
 
+            // Check if the marble is already in the list
+            if (draggableList.includes(marbleName)) {
+                console.log("Draggable already in drop area:", marbleName);
+                drag.source.x = drag.source.previousX;
+                drag.source.y = drag.source.previousY;
+                return;
+            }
+
+            if (current_color != "None")
+            {
+                if (current_color == "Light")
+                {
+                    if (draggableList.length == 1) {
+                        if (marbleName.includes("Dark")){
+                            // put the one inside the draggableList in the middle
+                            // put the black one in the drop area.
+                        }
+                        else {
+                            draggableList.push(marbleName);
+                            console.log("Added draggable:", marbleName, "to drop area:", dropName);
+                        } 
+                    }
+                    else {
+                        if (marbleName.includes("Dark")){
+                            // dont push
+                            console.log("cant push to the drop with more than 1 drags!:", marbleName);
+                            drag.source.x = drag.source.previousX;
+                            drag.source.y = drag.source.previousY;
+                            return
+                        }
+                        else {
+                            draggableList.push(marbleName);
+                            console.log("Added draggable:", marbleName, "to drop area:", dropName);
+                        }  
+                    }
+                }
+                if (current_color == "Dark")
+                {
+                    if (draggableList.length == 1) {
+                        if (marbleName.includes("Light")){
+                            // put the one inside the draggableList in the middle
+                            // put the black one in the drop area.
+                        }
+                        else {
+                            draggableList.push(marbleName);
+                            console.log("Added draggable:", marbleName, "to drop area:", dropName);
+                        } 
+                    }
+                    else {
+                        if (marbleName.includes("Light")){
+                            // dont push
+                            console.log("cant push to the drop with more than 1 drags!:", marbleName);
+                            drag.source.x = drag.source.previousX;
+                            drag.source.y = drag.source.previousY;
+                            return
+                        }
+                        else {
+                            draggableList.push(marbleName);
+                            console.log("Added draggable:", marbleName, "to drop area:", dropName);
+                        }  
+                    }
+                }
+            }
+            else {
+                if (marbleName.includes("Light")) {
+                    current_color = "Light";
+                } else if (marbleName.includes("Dark")) {
+                    current_color = "Dark";
+                }
+                draggableList.push(marbleName);
+                console.log("Added draggable:", marbleName, "to drop area:", dropName);
+            }
+
+            console.log("Current color:", current_color);
+
+            // Add the marble to the list
+            // draggableList.push(marbleName);
+            // console.log("Added draggable:", marbleName, "to drop area:", dropName);
+            console.log("Current draggable list:", draggableList);
+
+
+            // Position the draggable at the top of the stack
+            let marbleNumbers = draggableList.length;
+            let targetPos = triangleContainer.mapToItem(drag.source.parent, 0, 0);
+            drag.source.x = targetPos.x + (triangleContainer.width - drag.source.width) / 2;
+            drag.source.y = targetPos.y + triangleContainer.height - (drag.source.height * marbleNumbers);
+        }
+        onExited: {
+            let droppedKeys = drag.source.Drag.keys;
+            let marbleName = droppedKeys[0]; // Example: "Marble_Light_1"
+            marbleHovered = false;
+
+            // Allow only the top marble to be moved
+            if (marbleName !== draggableList[draggableList.length - 1]) {
+                console.log("Only the top draggable can be moved!");
+                drag.source.x = drag.source.previousX;
+                drag.source.y = drag.source.previousY;
+                return;
+            }
+
+            // Remove the marble from the list
+            let index = draggableList.indexOf(marbleName);
+            if (index !== -1) {
+                draggableList.splice(index, 1);
+                console.log("Removed draggable:", marbleName, "from drop area:", dropName);
+            }
+
+            if (draggableList.length <= 0) {
+                current_color = "None"; // No marbles left
+            }
+            console.log("Updated draggable list:", draggableList);
+            console.log("Current color:", current_color);
+        }
     }
 
-    // Text {
-    //     id: debugText
-    //     anchors.centerIn: parent
-    //     text: marbleHovered ? "Hovered" : ""
-    //     color: "red"
-    //     font.pixelSize: 20
-    //     visible: marbleHovered
+
+    // DropArea {
+        // anchors.fill: parent
+    //     onEntered:
+    //     {
+    //         console.log("Drag entered drop area: ", dropName)
+    //         marbleHovered = true;
+    //     }
+    //     onDropped:
+    //     {
+    //         console.log("///////////////////DROP/////////////////////////")
+    //         console.log("Item dropped with keys:", drag.source.Drag.keys)
+    //         console.log("Item dropped at the name:", dropName)
+    //         marbleHovered = false;
+    //     } 
+    //     onExited: {
+    //         marbleHovered = false;
+    //         console.log("Drag left drop area: ", dropName)
+    //     }
     // }
+
 }
 

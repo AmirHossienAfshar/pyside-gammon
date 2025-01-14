@@ -7,12 +7,12 @@ Rectangle {
     height: 300
     color: "transparent"
 
+    property bool marbleHovered: false  // Tracks hover state
+    property string dropName: ""
+    
     property int marble_numbers: 0                  // Number of marbles
     property var marble_list: []                    // List of marble identifiers
     property string current_color: "None"           // Current color ("Light", "Dark", or "None")
-
-    property bool marbleHovered: false  // Tracks hover state
-    property string dropName: ""
     
     Shape {
         id: triangle
@@ -40,20 +40,9 @@ Rectangle {
         anchors.fill: parent
         onEntered:
         {
-            console.log("Drag entered drop area: ", dropName)
             marbleHovered = true;
+            console.log("Drag entered drop area: ", dropName)
         }
-    //     onDropped:
-    //     {
-    //         console.log("///////////////////DROP/////////////////////////")
-    //         console.log("Item dropped with keys:", drag.source.Drag.keys)
-    //         console.log("Item dropped at the name:", dropName)
-    //         marbleHovered = false;
-    //     } 
-    //     onExited: {
-    //         marbleHovered = false;
-    //         console.log("Drag left drop area: ", dropName)
-    //     }
         onDropped: {
             console.log("///////////////////DROP/////////////////////////")
             let droppedKeys = drag.source.Drag.keys;
@@ -111,6 +100,17 @@ Rectangle {
                 console.log("Current color:", current_color);
             }
         }
+    //     onDropped:
+    //     {
+    //         console.log("///////////////////DROP/////////////////////////")
+    //         console.log("Item dropped with keys:", drag.source.Drag.keys)
+    //         console.log("Item dropped at the name:", dropName)
+    //         marbleHovered = false;
+    //     } 
+    //     onExited: {
+    //         marbleHovered = false;
+    //         console.log("Drag left drop area: ", dropName)
+    //     }
     }
 
     // Optional debug information
@@ -124,14 +124,3 @@ Rectangle {
         visible: true
     }   
 }
-
-    // Text {
-    //     id: debugText
-    //     anchors.centerIn: parent
-    //     text: marbleHovered ? "Hovered" : ""
-    //     color: "red"
-    //     font.pixelSize: 20
-    //     visible: marbleHovered
-    // }
-
-
